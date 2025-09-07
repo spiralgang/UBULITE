@@ -1,0 +1,10 @@
+{ "ts": "2025-09-07T18:22:08Z", "event": "model_sync", "models": - name: Clone Models from Manifest
+  run: |
+    jq -r '.models[] | "\(.repo) \(.dir)"' configs/model_manifest.json | while read repo dir; do
+      if [ ! -d "models/$dir" ]; then
+        echo "[FETCH] $repo -> models/$dir"
+        git clone "$repo" "models/$dir"
+      else
+        echo "[SKIP] models/$dir already present"
+      fi
+    done }
