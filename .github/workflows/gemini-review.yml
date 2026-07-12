@@ -45,6 +45,9 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID || '' }}
+
+      - name: Obtain access token
+        if: env.GEMINI_AUTH_MODE == 'gcloud'
         run: |
           TOKEN=$(gcloud auth print-access-token)
           if [ -z "$TOKEN" ]; then
