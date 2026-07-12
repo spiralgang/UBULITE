@@ -1,7 +1,7 @@
 name: Code-Reaver Pull Request Scrutiny
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
@@ -52,7 +52,7 @@ jobs:
         print(f"Commencing full-spectrum analysis of pull requests for {REPO_OWNER}/{REPO_NAME}...")
 
         pulls = repo.get_pulls(state='all', sort='created', direction='desc')
-        
+
         pr_data = []
         for pr in pulls:
             if pr.merged:
@@ -73,8 +73,9 @@ jobs:
                 })
             else:
                 print(f"PR #{pr.number}: '{pr.title}' by {pr.user.login} is still {pr.state}. (ID: {pr.id})")
-        
+
         print("\n--- Summary of Pain Points ---")
         if pr_data:
-            # Additional analysis can go here
+            avg_time = sum(pr['time_to_merge_hours'] for pr in pr_data) / len(pr_data)
+            print(f"Average time to merge: {round(avg_time, 2)} hours")
         EOF
